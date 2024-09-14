@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"user-service/genproto/userpb"
 	"user-service/internal/repository"
 )
@@ -16,21 +17,21 @@ func NewService(repo repository.IUserRepository) *Service {
 	}
 }
 
-func (u *Service) Register(req *userpb.CreateUserReq) (*userpb.CreateUserResp, error) {
-	return u.repo.Register(req)
+func (u *Service) Register(ctx context.Context, req *userpb.CreateUserReq) (*userpb.CreateUserResp, error) {
+	return u.repo.Register(ctx, req)
 }
-func (u *Service) UpdateUser(req *userpb.UpdateUserReq) (*userpb.UpdateUserResp, error) {
-	return u.repo.UpdateUser(req)
+func (u *Service) UpdateUser(ctx context.Context, req *userpb.UpdateUserReq) (*userpb.UpdateUserResp, error) {
+	return u.repo.UpdateUser(ctx, req)
 }
-func (u *Service) DeleteUser(req *userpb.DeleteUserReq) (*userpb.DeleteUserResp, error) {
-	return u.repo.DeleteUser(req)
+func (u *Service) DeleteUser(ctx context.Context, req *userpb.DeleteUserReq) (*userpb.DeleteUserResp, error) {
+	return u.repo.DeleteUser(ctx, req)
 }
-func (u *Service) GetUserById(req *userpb.GetUserByIdReq) (*userpb.GetUserByIdResp, error) {
-	return u.repo.GetUserById(req)
+func (u *Service) GetUserById(ctx context.Context, req *userpb.GetUserByIdReq) (*userpb.GetUserByIdResp, error) {
+	return u.repo.GetUserById(ctx, req)
 }
-func (u *Service) Login(req *userpb.LoginReq) (*userpb.LoginResp, error) {
-	return u.repo.Login(req)
+func (u *Service) Login(ctx context.Context, req *userpb.LoginReq) (*userpb.LoginResp, error) {
+	return u.repo.Login(ctx, req)
 }
-func (u *Service) VerifyUser(req *userpb.VerifyUserReq) (*userpb.VerifyUserResp, error) {
-	return u.repo.VerifyUser(req)
+func (u *Service) VerifyUser(ctx context.Context, req *userpb.VerifyUserReq) (*userpb.VerifyUserResp, error) {
+	return u.repo.VerifyUser(ctx, req)
 }

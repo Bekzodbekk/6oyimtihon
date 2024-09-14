@@ -4,7 +4,10 @@ import (
 	"log"
 	"user-service/internal/pkg/load"
 	"user-service/internal/pkg/postgres"
+	userservice "user-service/internal/pkg/user-service"
 	"user-service/internal/repository"
+	"user-service/internal/service"
+
 )
 
 func main() {
@@ -17,6 +20,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	
+	queries := postgres.NewQueries(db)
 
-	repo := repository.NewUserRepo()
+	repo := repository.NewUserRepo(queries)
+	service := service.NewService(repo)
+	runService := userservice.NewRunService(*service)
+
+	if err := runService.RUN(*cfg); err != nil{
+		log.Fatal(err)
+	}
 }

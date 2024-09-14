@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"user-service/internal/pkg/load"
+
+	dbs "user-service/storage"
 )
 
 func InitDB(cfg load.Config) (*sql.DB, error) {
@@ -20,4 +22,8 @@ func InitDB(cfg load.Config) (*sql.DB, error) {
 	}
 
 	return db, nil
+}
+
+func NewQueries(db *sql.DB) *dbs.Queries {
+	return dbs.New(db)
 }

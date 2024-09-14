@@ -5,6 +5,6 @@ service:
 postgres:
   host: localhost
   port: 5432
-  dbname: usersDB
+  dbname: usersdb
   username: postgres
   password: 1
