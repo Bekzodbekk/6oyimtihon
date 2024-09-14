@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+option go_package = "genproto/userpb";
+
+
+service UserService{
+    rpc Register(CreateUserReq) returns (CreateUserResp){}
+    rpc UpdateUser(UpdateUserReq) returns (UpdateUserResp){}
+    rpc DeleteUser(DeleteUserReq) returns (DeleteUserResp){}
+    rpc GetUserById(GetUserByIdReq) returns (GetUserByIdResp){}
+    rpc Login(LoginReq) returns (LoginResp){}
+    rpc VerifyUser(VerifyUserReq) returns (VerifyUserResp){}
+}
+
+message User{
+    string id = 1;
+    string username = 2;
+    string password = 3;
+    string email = 4;
+    CUD cud = 5;
+}
+
+message CUD{
+    string created_at = 1;
+    string updated_at = 2;
+    int64 deleted_at = 3;
+}
+
+// Create User
+message CreateUserReq{
+    string username = 1;
+    string password = 2;
+    string email = 3;
+}
+message CreateUserResp{
+    bool status = 1;
+    string message = 2;
+    User user = 3;
+}
+
+// Update User
+message UpdateUserReq{
+    string id = 1;
+    string username = 2;
+    string password = 3;
+    string email = 4;
+}
+
+message UpdateUserResp{
+    bool status = 1;
+    string message = 2;
+    User user = 3;
+}
+
+// Delete User
+message DeleteUserReq{
+    string id = 1;
+}
+message DeleteUserResp{
+    bool status = 1;
+    string message = 2;
+}
+
+// Get User By ID
+message GetUserByIdReq{
+    string id = 1;
+}
+message GetUserByIdResp{
+    bool status = 1;
+    string message = 2;
+    User user = 3;
+}
+
+// Login
+message LoginReq{
+    string username = 1;
+    string password = 2;
+}
+message LoginResp{
+    bool status = 1;
+    string message = 2;
+    string token = 3;
+    string expiresIn = 4;
+}
+
+// Verify User
+message VerifyUserReq{
+    string email = 1;
+    string password = 2;
+}
+message VerifyUserResp{
+    bool status = 1;
+    string message = 2;
+}
+
