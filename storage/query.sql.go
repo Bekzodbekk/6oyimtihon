@@ -106,6 +106,23 @@ func (q *Queries) GetUserById(ctx context.Context, id uuid.UUID) (User, error) {
 	return i, err
 }
 
+const login = `-- name: Login :one
+SELECT id, password FROM users
+WHERE username = $1
+`
+
+type LoginRow struct {
+	ID       uuid.UUID
+	Password string
+}
+
+func (q *Queries) Login(ctx context.Context, username string) (LoginRow, error) {
+	row := q.db.QueryRowContext(ctx, login, username)
+	var i LoginRow
+	err := row.Scan(&i.ID, &i.Password)
+	return i, err
+}
+
 const updateUser = `-- name: UpdateUser :one
 UPDATE users
 SET username = $2,

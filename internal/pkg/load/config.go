@@ -10,8 +10,14 @@ type Postgres struct {
 	Password string
 }
 
+type Redis struct {
+	Host string
+	Port int
+}
+
 type Config struct {
 	Postgres Postgres
+	Redis    Redis
 
 	UserServiceHost string
 	UserServicePort int
@@ -33,6 +39,10 @@ func Load(path string) (*Config, error) {
 			Database: viper.GetString("postgres.dbname"),
 			Username: viper.GetString("postgres.username"),
 			Password: viper.GetString("postgres.password"),
+		},
+		Redis: Redis{
+			Host: viper.GetString("redis.host"),
+			Port: viper.GetInt("redis.port"),
 		},
 
 		UserServiceHost: viper.GetString("service.host"),

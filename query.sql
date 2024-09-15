@@ -37,3 +37,7 @@ WHERE id = $1;
 -- name: CheckUser :one
 SELECT id FROM users
 WHERE username = $1 OR email = $2;
+
+-- name: Login :one
+SELECT id, password FROM users
+WHERE username = $1;
