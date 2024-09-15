@@ -6,9 +6,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-var secretKey = "6oyimtihon"
-
-func CreateTokens(id string) (string, error) {
+func CreateTokens(id string, secretKey string) (string, error) {
 	accessTokenClaims := jwt.MapClaims{
 		"id":  id,
 		"exp": time.Now().Add(time.Hour * 1).Unix(),

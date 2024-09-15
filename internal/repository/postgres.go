@@ -3,10 +3,14 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"time"
 	"user-service/genproto/userpb"
+	"user-service/internal/pkg/load"
 	"user-service/storage"
 	"user-service/token"
+
+	"gopkg.in/gomail.v2"
 
 	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
@@ -17,12 +21,14 @@ import (
 type UserRepo struct {
 	db  *storage.Queries
 	rdb *redis.Client
+	cfg load.Config
 }
 
-func NewUserRepo(db *storage.Queries, rdb *redis.Client) IUserRepository {
+func NewUserRepo(cfg load.Config, db *storage.Queries, rdb *redis.Client) IUserRepository {
 	return &UserRepo{
 		db:  db,
 		rdb: rdb,
+		cfg: cfg,
 	}
 }
 
@@ -58,6 +64,11 @@ func (u *UserRepo) Register(ctx context.Context, req *userpb.CreateUserReq) (*us
 	}
 
 	err = u.rdb.Expire(ctx, req.Email, 60*time.Second).Err()
+	if err != nil {
+		return nil, err
+	}
+
+	err = u.SendEmail(req.Email, expiredKey)
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +166,7 @@ func (u *UserRepo) Login(ctx context.Context, req *userpb.LoginReq) (*userpb.Log
 	if err != nil {
 		return nil, err
 	}
-	accessToken, err := token.CreateTokens(result.ID.String())
+	accessToken, err := token.CreateTokens(result.ID.String(), u.cfg.SecretKey)
 	if err != nil {
 		return nil, err
 	}
@@ -167,6 +178,9 @@ func (u *UserRepo) Login(ctx context.Context, req *userpb.LoginReq) (*userpb.Log
 }
 func (u *UserRepo) VerifyUser(ctx context.Context, req *userpb.VerifyUserReq) (*userpb.VerifyUserResp, error) {
 	userRedis, err := u.rdb.HGetAll(ctx, req.Email).Result()
+	if err != nil {
+		return nil, err
+	}
 
 	if userRedis["expiredKey"] != req.Password {
 		return &userpb.VerifyUserResp{
@@ -203,4 +217,80 @@ func (u *UserRepo) VerifyUser(ctx context.Context, req *userpb.VerifyUserReq) (*
 func (u *UserRepo) GenerateRandomNumber() int {
 	rand.Seed(uint64(time.Now().UnixNano()))
 	return rand.Intn(9000) + 1000
+}
+
+func (u *UserRepo) SendEmail(to string, code int) error {
+	subject := "----Welcome buddy----"
+
+	body := fmt.Sprintf(`
+	  <!DOCTYPE html>
+	  <html>
+	  <head>
+		<style>
+		  .container {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+			padding: 20px;
+			border-radius: 10px;
+			width: 80%%;
+			margin: 0 auto;
+			color: #333;
+		  }
+		  .header {
+			background-color: #4CAF50;
+			color: white;
+			padding: 10px;
+			border-radius: 10px 10px 0 0;
+			text-align: center;
+		  }
+		  .content {
+			padding: 20px;
+			background-color: white;
+			border-radius: 0 0 10px 10px;
+		  }
+		  .code {
+			font-size: 24px;
+			font-weight: bold;
+			color: #4CAF50;
+			text-align: center;
+			margin: 20px 0;
+		  }
+		  .footer {
+			text-align: center;
+			padding: 10px;
+			font-size: 12px;
+			color: #777;
+		  }
+		</style>
+	  </head>
+	  <body>
+		<div class="container">
+		  <div class="header">
+			<h1>Welcome to Our Service!</h1>
+		  </div>
+		  <div class="content">
+			<p>Dear user,</p>
+			<p>Thank you for signing up. To complete your registration, please use the following confirmation code:</p>
+			<div class="code">%d</div>
+			<p>If you didn't sign up, please ignore this email.</p>
+		  </div>
+		  <div class="footer">
+			<p>This is an automated message, please do not reply.</p>
+		  </div>
+		</div>
+	  </body>
+	  </html>
+	`, code)
+
+	m := gomail.NewMessage()
+	m.SetHeader("From", "bekzodnematov709@gmail.com")
+	m.SetHeader("To", to)
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/html", body)
+	d := gomail.NewDialer("smtp.gmail.com", 587, u.cfg.Email, u.cfg.AccessKey)
+
+	if err := d.DialAndSend(m); err != nil {
+		return err
+	}
+	return nil
 }

@@ -21,6 +21,10 @@ type Config struct {
 
 	UserServiceHost string
 	UserServicePort int
+
+	Email     string
+	AccessKey string
+	SecretKey string
 }
 
 func Load(path string) (*Config, error) {
@@ -47,6 +51,9 @@ func Load(path string) (*Config, error) {
 
 		UserServiceHost: viper.GetString("service.host"),
 		UserServicePort: viper.GetInt("service.port"),
+		Email:           viper.GetString("email"),
+		AccessKey:       viper.GetString("accessKey"),
+		SecretKey:       viper.GetString("auth.secretKey"),
 	}
 
 	return &conf, nil

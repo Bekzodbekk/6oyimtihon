@@ -12,3 +12,9 @@ postgres:
 redis:
   host: localhost
   port: 6379
+
+email: bekzodnematov709@gmail.com
+accessKey: funt snwb bqdo kqfk
+
+auth:
+  secretKey: 6oyimtihon

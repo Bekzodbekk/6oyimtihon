@@ -28,7 +28,7 @@ func main() {
 
 	queries := postgres.NewQueries(db)
 
-	repo := repository.NewUserRepo(queries, rdb)
+	repo := repository.NewUserRepo(*cfg, queries, rdb)
 	service := service.NewService(repo)
 	runService := userservice.NewRunService(*service)
 
