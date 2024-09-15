@@ -1,0 +1,27 @@
+syntax="proto3";
+
+option go_package = "./genproto/reportingpb";
+
+service ReportingService {
+    rpc GetTotalReports(GetTotalReportsRequest) returns (GetTotalReportsResponse);
+    rpc GetReportsSpendingByCategory(GetReportsByCategoryRequest) returns (GetReportsByCategoryResponse);
+}
+
+message GetTotalReportsRequest {}
+
+message GetTotalReportsResponse {
+    int64 total_income = 1;
+    int64 total_expenses = 2;
+    int64 net_savings = 3;
+}
+
+message GetReportsByCategoryRequest {}
+
+message SpendingByCategory {
+    string category = 1;
+    int64 total_spent = 2;
+}
+
+message GetReportsByCategoryResponse {
+    repeated SpendingByCategory list = 1;
+}
