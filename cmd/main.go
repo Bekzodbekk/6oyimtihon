@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	
 	cfg, err := load.Load("./config/config.yaml")
 	if err != nil {
 		log.Fatal(err)
