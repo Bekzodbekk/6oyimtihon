@@ -1,6 +1,5 @@
 package logger
 
-
 import (
 	"io"
 	"os"
