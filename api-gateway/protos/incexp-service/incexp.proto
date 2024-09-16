@@ -1,0 +1,48 @@
+syntax="proto3";
+
+option go_package = "./genproto/incexpb";
+
+service IncExpService {
+    rpc RegisterIncome(RegisterIncomeRequest) returns (RegisterIncomeResponse);
+    rpc RegisterExpense(RegisterExpenseRequest) returns (RegisterExpenseResponse);
+    rpc GetListIncomeVSExpense(GetListIncomeVSExpenseRequest) returns (GetListIncomeVSExpenseResponse);
+}
+
+message RegisterIncomeRequest {
+    int64 amount = 1;
+    string currency = 2;
+    string category_id = 3;
+    string date = 4;
+}
+
+message RegisterIncomeResponse {
+    string message = 1;
+    string transaction_id = 2;
+}
+
+message RegisterExpenseRequest {
+    int64 amount = 1;
+    string currency = 2;
+    string category_id = 3;
+    string date = 4;
+}
+
+message RegisterExpenseResponse {
+    string message = 1;
+    string transaction_id = 2;
+}
+
+message IncomeVSExpense {
+    string transaction_id = 1;
+    string type = 2;
+    int64 amount = 3;
+    string currency = 4;
+    string category = 5;
+    string date = 6;
+
+}
+message GetListIncomeVSExpenseRequest {}
+
+message GetListIncomeVSExpenseResponse {
+    repeated IncomeVSExpense list = 1;
+}

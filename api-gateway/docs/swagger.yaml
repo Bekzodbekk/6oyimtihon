@@ -1,0 +1,549 @@
+basePath: /
+definitions:
+  models.Budget:
+    properties:
+      amount:
+        type: integer
+      budget_id:
+        type: string
+      category:
+        type: string
+      currency:
+        type: string
+      spent:
+        type: integer
+    type: object
+  models.CreateBudgetRequest:
+    properties:
+      amount:
+        type: integer
+      category_id:
+        type: string
+      currency:
+        type: string
+    type: object
+  models.CreateBudgetResponse:
+    properties:
+      budget_id:
+        type: string
+      message:
+        type: string
+    type: object
+  models.GetListBudgetResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.Budget'
+        type: array
+    type: object
+  models.GetListIncomeVSExpenseResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.IncomeVSExpense'
+        type: array
+    type: object
+  models.GetReportsByCategoryResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.SpendingByCategory'
+        type: array
+    type: object
+  models.GetTotalReportsResponse:
+    properties:
+      net_savings:
+        type: integer
+      total_expenses:
+        type: integer
+      total_income:
+        type: integer
+    type: object
+  models.GetUserByIdResponse:
+    properties:
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+  models.GetUsersResponse:
+    properties:
+      list:
+        items:
+          $ref: '#/definitions/models.User'
+        type: array
+    type: object
+  models.IncomeVSExpense:
+    properties:
+      amount:
+        type: integer
+      category:
+        type: string
+      currency:
+        type: string
+      date:
+        type: string
+      transaction_id:
+        type: string
+      type:
+        type: string
+    type: object
+  models.LoginUserRequest:
+    properties:
+      password:
+        type: string
+      user_name:
+        type: string
+    type: object
+  models.RegisterExpenseRequest:
+    properties:
+      amount:
+        type: integer
+      category_id:
+        type: string
+      currency:
+        type: string
+      date:
+        type: string
+    type: object
+  models.RegisterExpenseResponse:
+    properties:
+      message:
+        type: string
+      transaction_id:
+        type: string
+    type: object
+  models.RegisterIncomeRequest:
+    properties:
+      amount:
+        type: integer
+      category_id:
+        type: string
+      currency:
+        type: string
+      date:
+        type: string
+    type: object
+  models.RegisterIncomeResponse:
+    properties:
+      message:
+        type: string
+      transaction_id:
+        type: string
+    type: object
+  models.RegisterUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      user_name:
+        type: string
+    type: object
+  models.RegisterUserResponse:
+    properties:
+      email:
+        type: string
+      user_id:
+        type: string
+      user_name:
+        type: string
+    type: object
+  models.SpendingByCategory:
+    properties:
+      category:
+        type: string
+      total_spent:
+        type: integer
+    type: object
+  models.UpdateBudgetRequest:
+    properties:
+      amount:
+        type: integer
+      budget_id:
+        type: string
+    type: object
+  models.UpdateBudgetResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      user_id:
+        type: string
+      user_name:
+        type: string
+    type: object
+  token.Tokens:
+    properties:
+      expiresIn:
+        type: string
+      token:
+        type: string
+    type: object
+host: localhost:9000
+info:
+  contact: {}
+  description: Api-gateway service
+  version: "1.0"
+paths:
+  /api/v1/budgets:
+    get:
+      consumes:
+      - application/json
+      description: This method gets budgets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GetListBudgetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: GET BUDGETS
+      tags:
+      - BUDGETS
+    post:
+      consumes:
+      - application/json
+      description: This method creates budget
+      parameters:
+      - description: Budget
+        in: body
+        name: budget
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateBudgetRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CreateBudgetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: CREATE BUDGETS
+      tags:
+      - BUDGETS
+  /api/v1/budgets/{id}:
+    put:
+      consumes:
+      - application/json
+      description: This method updates budgets
+      parameters:
+      - description: Budget id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: budget
+        in: body
+        name: budget
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateBudgetRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UpdateBudgetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: UPDATE BUDGETS
+      tags:
+      - BUDGETS
+  /api/v1/reports/income-expense:
+    get:
+      consumes:
+      - application/json
+      description: This method gets reports
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GetTotalReportsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: GET REPORTS
+      tags:
+      - REPORTING
+  /api/v1/reports/spending-by-category:
+    get:
+      consumes:
+      - application/json
+      description: This method gets reports by category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GetReportsByCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: GET REPORTS BY CATEGORY
+      tags:
+      - REPORTING
+  /api/v1/transactions:
+    get:
+      consumes:
+      - application/json
+      description: This method gets income and expense
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GetListIncomeVSExpenseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: GET TRANSACTIONS
+      tags:
+      - TRANSACTIONS
+  /api/v1/transactions/expense:
+    post:
+      consumes:
+      - application/json
+      description: This method registers expense
+      parameters:
+      - description: Expense
+        in: body
+        name: expense
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterExpenseRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.RegisterExpenseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: REGISTER EXPENSE
+      tags:
+      - TRANSACTIONS
+  /api/v1/transactions/income:
+    post:
+      consumes:
+      - application/json
+      description: This method registers income
+      parameters:
+      - description: Income
+        in: body
+        name: income
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterIncomeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.RegisterIncomeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: REGISTER INCOME
+      tags:
+      - TRANSACTIONS
+  /api/v1/users:
+    post:
+      consumes:
+      - application/json
+      description: This method registers a new user
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.RegisterUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: REGISTER USERS
+      tags:
+      - AUTH
+  /api/v1/users/login:
+    post:
+      consumes:
+      - application/json
+      description: This method login users
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/token.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      - BearerAuth: []
+      summary: LOGIN USERS
+      tags:
+      - AUTH
+  /api/v1/users/profile:
+    get:
+      consumes:
+      - application/json
+      description: This method retrieves a list of users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GetUsersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: GET USERS LIST
+      tags:
+      - USERS
+  /api/v1/users/profile/{id}:
+    get:
+      consumes:
+      - application/json
+      description: This method retrieves a user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GetUserByIdResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: GET USER BY ID
+      tags:
+      - USERS
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,25 @@
+api-gateway:
+  host: localhost
+  port: 9000
+
+token:
+  key: secret-key
+
+file:
+  cert: ./tls/cert.pem
+  key: ./tls/key.pem
+
+services:
+  user-service:
+    host: localhost
+    port: 8001
+  incexp-service:
+    host: localhost
+    port: 8002
+  reporting-service:
+    host: localhost
+    port: 8003
+  budget-service:
+    host: localhost
+    port: 8004
+  
