@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+option go_package = "genproto/budgetpb";
+
+service BudgetService{
+    rpc CreateBudget(CreateBudgetReq) returns (CreateBudgetResp){}
+    rpc UpdateBudget(UpdateBudgetReq) returns (UpdateBudgetResp){}
+    rpc DeleteBudget(DeleteBudgetReq) returns (DeleteBudgetResp){}
+    rpc GetBudgetById(GetBudgetByIdReq) returns (GetBudgetByIdResp){}
+    rpc GetBudgets(GetBudgetsReq) returns (GetBudgetsResp){}
+}
+
+message Budget{
+    string id = 1;
+    string category = 2;
+    float amount = 3;
+    float spent = 4;
+    string currency = 5;
+    CUDBudget cud = 6;
+}
+
+message CUDBudget{
+    string created_at = 1;
+    string updated_at = 2;
+    int64 deleted_at = 3;
+}
+
+// Create Budget
+message CreateBudgetReq{
+    string category = 1;
+    float amount = 2;
+    string currency = 3;
+}
+message CreateBudgetResp{
+    bool status = 1;
+    string message = 2;
+    Budget budget = 3;
+}
+
+// Update Budget
+message UpdateBudgetReq{
+    string id = 1;
+    string category = 2;
+    float amount = 3;
+    string currency = 4;
+}
+message UpdateBudgetResp{
+    bool status = 1;
+    string message = 2;
+    Budget budget = 3;
+}
+
+// Delete Budget
+message DeleteBudgetReq{
+    string id = 1;
+}
+message DeleteBudgetResp{
+    bool status = 1;
+    string message = 2;
+}
+
+// Get Budget By Id
+message GetBudgetByIdReq{
+    string id = 1;
+}
+message GetBudgetByIdResp{
+    bool status = 1;
+    string message = 2;
+    Budget budget = 3;
+}
+
+// Get Budgets
+message GetBudgetsReq{}
+message GetBudgetsResp{
+    bool status = 1;
+    string message = 2;
+    int64 count = 3;
+    repeated Budget budget = 4;
+}

@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS budgets(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    category VARCHAR(255) NOT NULL,
+    amount FLOAT NOT NULL,
+    spent FLOAT DEFAULT 0,
+    currency VARCHAR(255) NOT NULL,
+    created_at VARCHAR(255) DEFAULT CURRENT_TIMESTAMP,
+    updated_at VARCHAR(255) DEFAULT CURRENT_TIMESTAMP,
+    deleted_at INT DEFAULT 0
+);
