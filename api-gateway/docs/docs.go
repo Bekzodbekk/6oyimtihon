@@ -15,153 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/budgets": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "This method gets budgets",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "BUDGETS"
-                ],
-                "summary": "GET BUDGETS",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.GetListBudgetResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "This method creates budget",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "BUDGETS"
-                ],
-                "summary": "CREATE BUDGETS",
-                "parameters": [
-                    {
-                        "description": "Budget",
-                        "name": "budget",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.CreateBudgetRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.CreateBudgetResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/budgets/{id}": {
-            "put": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "This method updates budgets",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "BUDGETS"
-                ],
-                "summary": "UPDATE BUDGETS",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Budget id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "budget",
-                        "name": "budget",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.UpdateBudgetRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.UpdateBudgetResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/reports/income-expense": {
             "get": {
                 "security": [
@@ -386,11 +239,6 @@ const docTemplate = `{
         },
         "/api/v1/users": {
             "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
                 "description": "This method registers a new user",
                 "consumes": [
                     "application/json"
@@ -401,10 +249,10 @@ const docTemplate = `{
                 "tags": [
                     "AUTH"
                 ],
-                "summary": "REGISTER USERS",
+                "summary": "Register a new user",
                 "parameters": [
                     {
-                        "description": "User",
+                        "description": "User registration details",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -437,15 +285,7 @@ const docTemplate = `{
         },
         "/api/v1/users/login": {
             "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    },
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "This method login users",
+                "description": "This method logs in a user",
                 "consumes": [
                     "application/json"
                 ],
@@ -455,10 +295,10 @@ const docTemplate = `{
                 "tags": [
                     "AUTH"
                 ],
-                "summary": "LOGIN USERS",
+                "summary": "Login user",
                 "parameters": [
                     {
-                        "description": "User",
+                        "description": "User login credentials",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -472,46 +312,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/token.Tokens"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/users/profile": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "This method retrieves a list of users",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "USERS"
-                ],
-                "summary": "GET USERS LIST",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.GetUsersResponse"
                         }
                     },
                     "400": {
@@ -546,7 +346,7 @@ const docTemplate = `{
                 "tags": [
                     "USERS"
                 ],
-                "summary": "GET USER BY ID",
+                "summary": "Get user by ID",
                 "parameters": [
                     {
                         "type": "string",
@@ -563,6 +363,46 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.GetUserByIdResponse"
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/verify": {
+            "post": {
+                "description": "This method verifies a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AUTH"
+                ],
+                "summary": "Verify user",
+                "parameters": [
+                    {
+                        "description": "User verification details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.VerifyUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.VerifyUserResp"
+                        }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
@@ -577,62 +417,116 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/users/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "This method updates a user's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "USERS"
+                ],
+                "summary": "Update user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User update details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UpdateUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.UpdateUserResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "This method deletes a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "USERS"
+                ],
+                "summary": "Delete user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.DeleteUserRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "models.Budget": {
+        "models.DeleteUserRes": {
             "type": "object",
             "properties": {
-                "amount": {
-                    "type": "integer"
-                },
-                "budget_id": {
-                    "type": "string"
-                },
-                "category": {
-                    "type": "string"
-                },
-                "currency": {
-                    "type": "string"
-                },
-                "spent": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.CreateBudgetRequest": {
-            "type": "object",
-            "properties": {
-                "amount": {
-                    "type": "integer"
-                },
-                "category_id": {
-                    "type": "string"
-                },
-                "currency": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.CreateBudgetResponse": {
-            "type": "object",
-            "properties": {
-                "budget_id": {
-                    "type": "string"
-                },
                 "message": {
                     "type": "string"
-                }
-            }
-        },
-        "models.GetListBudgetResponse": {
-            "type": "object",
-            "properties": {
-                "list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Budget"
-                    }
+                },
+                "status": {
+                    "type": "boolean"
                 }
             }
         },
@@ -680,17 +574,6 @@ const docTemplate = `{
                 }
             }
         },
-        "models.GetUsersResponse": {
-            "type": "object",
-            "properties": {
-                "list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.User"
-                    }
-                }
-            }
-        },
         "models.IncomeVSExpense": {
             "type": "object",
             "properties": {
@@ -720,7 +603,7 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "user_name": {
+                "username": {
                     "type": "string"
                 }
             }
@@ -790,7 +673,7 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "user_name": {
+                "username": {
                     "type": "string"
                 }
             }
@@ -804,7 +687,7 @@ const docTemplate = `{
                 "user_id": {
                     "type": "string"
                 },
-                "user_name": {
+                "username": {
                     "type": "string"
                 }
             }
@@ -820,22 +703,28 @@ const docTemplate = `{
                 }
             }
         },
-        "models.UpdateBudgetRequest": {
+        "models.UpdateUserReq": {
             "type": "object",
             "properties": {
-                "amount": {
-                    "type": "integer"
+                "email": {
+                    "type": "string"
                 },
-                "budget_id": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
         },
-        "models.UpdateBudgetResponse": {
+        "models.UpdateUserResp": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
                 }
             }
         },
@@ -848,8 +737,30 @@ const docTemplate = `{
                 "user_id": {
                     "type": "string"
                 },
-                "user_name": {
+                "username": {
                     "type": "string"
+                }
+            }
+        },
+        "models.VerifyUserReq": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.VerifyUserResp": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
                 }
             }
         },
@@ -884,6 +795,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "Api-gateway service",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {

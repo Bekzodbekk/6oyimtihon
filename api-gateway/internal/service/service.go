@@ -4,19 +4,19 @@ import (
 	pbBudget "api-gateway/genproto/budgetpb"
 	pbincExp "api-gateway/genproto/incexpb"
 	pbReporting "api-gateway/genproto/reportingpb"
-	pbUser "api-gateway/genproto/userpb"
+	userpb "api-gateway/genproto/userpb"
 	"context"
 )
 
 type ServiceRepositoryClient struct {
-	userClient      pbUser.UserServiceClient
+	userClient      userpb.UserServiceClient
 	incexpClient    pbincExp.IncExpServiceClient
 	budgetClient    pbBudget.BudgetServiceClient
 	reportingClient pbReporting.ReportingServiceClient
 }
 
 func NewServiceRepositoryClient(
-	conn1 *pbUser.UserServiceClient,
+	conn1 *userpb.UserServiceClient,
 	conn2 *pbincExp.IncExpServiceClient,
 	conn3 *pbBudget.BudgetServiceClient,
 	conn4 *pbReporting.ReportingServiceClient,
@@ -30,21 +30,29 @@ func NewServiceRepositoryClient(
 }
 
 // User methods
-func (s *ServiceRepositoryClient) RegisterUser(ctx context.Context, req *pbUser.RegisterUserRequest) (*pbUser.RegisterUserResponse, error) {
-	return s.userClient.RegisterUser(ctx, req)
+func (s *ServiceRepositoryClient) RegisterUser(ctx context.Context, req *userpb.CreateUserReq) (*userpb.CreateUserResp, error) {
+	return s.userClient.Register(ctx, req)
 }
 
-func (s *ServiceRepositoryClient) LoginUser(ctx context.Context, req *pbUser.LoginUserRequest) (*pbUser.LoginUserResponse, error) {
-	return s.userClient.LoginUser(ctx, req)
+func (s *ServiceRepositoryClient) LoginUser(ctx context.Context, req *userpb.LoginReq) (*userpb.LoginResp, error) {
+	return s.userClient.Login(ctx, req)
 }
 
-func (s *ServiceRepositoryClient) GetUserById(ctx context.Context, req *pbUser.GetUserByIdRequest) (*pbUser.GetUserByIdResponse, error) {
+func (s *ServiceRepositoryClient) VerifyUser(ctx context.Context, req *userpb.VerifyUserReq) (*userpb.VerifyUserResp, error) {
+	return s.userClient.VerifyUser(ctx, req)
+}
+
+func (s *ServiceRepositoryClient) UpdateUser(ctx context.Context, req *userpb.UpdateUserReq) (*userpb.UpdateUserResp, error) {
+	return s.userClient.UpdateUser(ctx, req)
+}
+
+func (s *ServiceRepositoryClient) DeleteUser(ctx context.Context, req *userpb.DeleteUserReq) (*userpb.DeleteUserResp, error) {
+	return s.userClient.DeleteUser(ctx, req)
+}
+
+func (s *ServiceRepositoryClient) GetUserById(ctx context.Context, req *userpb.GetUserByIdReq) (*userpb.GetUserByIdResp, error) {
 	return s.userClient.GetUserById(ctx, req)
 }
-
-func (s *ServiceRepositoryClient) GetUsersList(ctx context.Context, req *pbUser.GetUsersRequest) (*pbUser.GetUsersResponse, error) {
-	return s.userClient.GetUsersList(ctx, req)
-} 
 
 // Income Expense methods
 func (s *ServiceRepositoryClient) RegisterIncome(ctx context.Context, req *pbincExp.RegisterIncomeRequest) (*pbincExp.RegisterIncomeResponse, error) {
@@ -60,16 +68,24 @@ func (s *ServiceRepositoryClient) GetListIncomeVSExpense(ctx context.Context, re
 }
 
 // Budget methods
-func (s *ServiceRepositoryClient) CreateBudget(ctx context.Context, req *pbBudget.CreateBudgetRequest) (*pbBudget.CreateBudgetResponse, error) {
+func (s *ServiceRepositoryClient) CreateBudget(ctx context.Context, req *pbBudget.CreateBudgetReq) (*pbBudget.CreateBudgetResp, error) {
 	return s.budgetClient.CreateBudget(ctx, req)
 }
 
-func (s *ServiceRepositoryClient) GetListBudget(ctx context.Context, req *pbBudget.GetListBudgetRequest) (*pbBudget.GetListBudgetResponse, error) {
-	return s.budgetClient.GetListBudget(ctx, req)
+func (s *ServiceRepositoryClient) UpdateBudget(ctx context.Context, req *pbBudget.UpdateBudgetReq) (*pbBudget.UpdateBudgetResp, error) {
+	return s.budgetClient.UpdateBudget(ctx, req)
 }
 
-func (s *ServiceRepositoryClient) UpdateBudget(ctx context.Context, req *pbBudget.UpdateBudgetRequest) (*pbBudget.UpdateBudgetResponse, error) {
-	return s.budgetClient.UpdateBudget(ctx, req)
+func (s *ServiceRepositoryClient) DeleteBudget(ctx context.Context, req *pbBudget.DeleteBudgetReq) (*pbBudget.DeleteBudgetResp, error) {
+	return s.budgetClient.DeleteBudget(ctx, req)
+}
+
+func (s *ServiceRepositoryClient) GetBudgetById(ctx context.Context, req *pbBudget.GetBudgetByIdReq) (*pbBudget.GetBudgetByIdResp, error) {
+	return s.budgetClient.GetBudgetById(ctx, req)
+}
+
+func (s *ServiceRepositoryClient) GetBudgets(ctx context.Context, req *pbBudget.GetBudgetsReq) (*pbBudget.GetBudgetsResp, error) {
+	return s.budgetClient.GetBudgets(ctx, req)
 }
 
 // Reporting methods

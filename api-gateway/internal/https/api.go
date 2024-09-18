@@ -26,7 +26,7 @@ func NewGin(service *service.ServiceRepositoryClient) *http.Server {
 	r := gin.Default()
 
 	apiHandler := handler.NewApiHandler(service)
-	
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Use(auth.MiddleWare())
@@ -36,16 +36,20 @@ func NewGin(service *service.ServiceRepositoryClient) *http.Server {
 	{
 		api.POST("/users", apiHandler.RegisterUser)
 		api.POST("/users/login", apiHandler.LoginUser)
+		api.POST("/users/verify", apiHandler.VerifyUser)
+		api.PUT("/users/:id", apiHandler.UpdateUser)
+		api.DELETE("/users/:id", apiHandler.DeleteUser)
 		api.GET("/users/profile/:id", apiHandler.GetUserById)
-		api.GET("/users/profile", apiHandler.GetUsersList)
 
 		api.POST("/transactions/income", apiHandler.RegisterIncome)
 		api.POST("/transactions/expense", apiHandler.RegisterExpense)
 		api.GET("/transactions", apiHandler.GetListIncomeVSExpense)
 
 		api.POST("/budgets", apiHandler.CreateBudget)
-		api.GET("/budgets", apiHandler.GetListBudget)
 		api.PUT("/budgets/:id", apiHandler.UpdateBudget)
+		api.GET("/budgets/:id", apiHandler.GetBudgetById)
+		api.GET("/budgets", apiHandler.GetBudgets)
+		api.DELETE("/budgets/:id", apiHandler.DeleteBudget)
 
 		api.GET("/reports/income-expense", apiHandler.GetTotalReports)
 		api.GET("/reports/spending-by-category", apiHandler.GetReportsByCategory)

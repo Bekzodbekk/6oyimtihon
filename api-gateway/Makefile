@@ -2,12 +2,12 @@ PROTO_DIR=protos
 
 gen-proto:
 	@protoc \
-		--go_out=. \
-		--go-grpc_out=. \
-		$(PROTO_DIR)/budget-service/budget.proto \
-		$(PROTO_DIR)/incexp-service/incexp.proto \
-		$(PROTO_DIR)/reporting-service/reporting.proto \
-		$(PROTO_DIR)/user-service/user.proto 
+	--go_out=. \
+	--go-grpc_out=. \
+	protos/budget-service/budget.proto \
+	protos/incexp-service/incexp.proto \
+	protos/reporting-service/reporting.proto \
+	protos/user-service/user.proto 
 		
 SWAGGER := ~/go/bin/swag
 SWAGGER_DOCS := docs

@@ -1,40 +1,11 @@
 basePath: /
 definitions:
-  models.Budget:
+  models.DeleteUserRes:
     properties:
-      amount:
-        type: integer
-      budget_id:
-        type: string
-      category:
-        type: string
-      currency:
-        type: string
-      spent:
-        type: integer
-    type: object
-  models.CreateBudgetRequest:
-    properties:
-      amount:
-        type: integer
-      category_id:
-        type: string
-      currency:
-        type: string
-    type: object
-  models.CreateBudgetResponse:
-    properties:
-      budget_id:
-        type: string
       message:
         type: string
-    type: object
-  models.GetListBudgetResponse:
-    properties:
-      list:
-        items:
-          $ref: '#/definitions/models.Budget'
-        type: array
+      status:
+        type: boolean
     type: object
   models.GetListIncomeVSExpenseResponse:
     properties:
@@ -64,13 +35,6 @@ definitions:
       user:
         $ref: '#/definitions/models.User'
     type: object
-  models.GetUsersResponse:
-    properties:
-      list:
-        items:
-          $ref: '#/definitions/models.User'
-        type: array
-    type: object
   models.IncomeVSExpense:
     properties:
       amount:
@@ -90,7 +54,7 @@ definitions:
     properties:
       password:
         type: string
-      user_name:
+      username:
         type: string
     type: object
   models.RegisterExpenseRequest:
@@ -135,7 +99,7 @@ definitions:
         type: string
       password:
         type: string
-      user_name:
+      username:
         type: string
     type: object
   models.RegisterUserResponse:
@@ -144,7 +108,7 @@ definitions:
         type: string
       user_id:
         type: string
-      user_name:
+      username:
         type: string
     type: object
   models.SpendingByCategory:
@@ -154,17 +118,21 @@ definitions:
       total_spent:
         type: integer
     type: object
-  models.UpdateBudgetRequest:
+  models.UpdateUserReq:
     properties:
-      amount:
-        type: integer
-      budget_id:
+      email:
+        type: string
+      password:
+        type: string
+      username:
         type: string
     type: object
-  models.UpdateBudgetResponse:
+  models.UpdateUserResp:
     properties:
       message:
         type: string
+      status:
+        type: boolean
     type: object
   models.User:
     properties:
@@ -172,8 +140,22 @@ definitions:
         type: string
       user_id:
         type: string
-      user_name:
+      username:
         type: string
+    type: object
+  models.VerifyUserReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  models.VerifyUserResp:
+    properties:
+      message:
+        type: string
+      status:
+        type: boolean
     type: object
   token.Tokens:
     properties:
@@ -188,99 +170,6 @@ info:
   description: Api-gateway service
   version: "1.0"
 paths:
-  /api/v1/budgets:
-    get:
-      consumes:
-      - application/json
-      description: This method gets budgets
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.GetListBudgetResponse'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: GET BUDGETS
-      tags:
-      - BUDGETS
-    post:
-      consumes:
-      - application/json
-      description: This method creates budget
-      parameters:
-      - description: Budget
-        in: body
-        name: budget
-        required: true
-        schema:
-          $ref: '#/definitions/models.CreateBudgetRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.CreateBudgetResponse'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: CREATE BUDGETS
-      tags:
-      - BUDGETS
-  /api/v1/budgets/{id}:
-    put:
-      consumes:
-      - application/json
-      description: This method updates budgets
-      parameters:
-      - description: Budget id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: budget
-        in: body
-        name: budget
-        required: true
-        schema:
-          $ref: '#/definitions/models.UpdateBudgetRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.UpdateBudgetResponse'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: UPDATE BUDGETS
-      tags:
-      - BUDGETS
   /api/v1/reports/income-expense:
     get:
       consumes:
@@ -426,7 +315,7 @@ paths:
       - application/json
       description: This method registers a new user
       parameters:
-      - description: User
+      - description: User registration details
         in: body
         name: user
         required: true
@@ -447,18 +336,79 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      security:
-      - BearerAuth: []
-      summary: REGISTER USERS
+      summary: Register a new user
       tags:
       - AUTH
+  /api/v1/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: This method deletes a user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DeleteUserRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete user
+      tags:
+      - USERS
+    put:
+      consumes:
+      - application/json
+      description: This method updates a user's information
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User update details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UpdateUserResp'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Update user
+      tags:
+      - USERS
   /api/v1/users/login:
     post:
       consumes:
       - application/json
-      description: This method login users
+      description: This method logs in a user
       parameters:
-      - description: User
+      - description: User login credentials
         in: body
         name: user
         required: true
@@ -479,37 +429,9 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      security:
-      - BearerAuth: []
-      - BearerAuth: []
-      summary: LOGIN USERS
+      summary: Login user
       tags:
       - AUTH
-  /api/v1/users/profile:
-    get:
-      consumes:
-      - application/json
-      description: This method retrieves a list of users
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.GetUsersResponse'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: GET USERS LIST
-      tags:
-      - USERS
   /api/v1/users/profile/{id}:
     get:
       consumes:
@@ -528,6 +450,34 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.GetUserByIdResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get user by ID
+      tags:
+      - USERS
+  /api/v1/users/verify:
+    post:
+      consumes:
+      - application/json
+      description: This method verifies a user
+      parameters:
+      - description: User verification details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.VerifyUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.VerifyUserResp'
         "400":
           description: Bad Request
           schema:
@@ -536,11 +486,9 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      security:
-      - BearerAuth: []
-      summary: GET USER BY ID
+      summary: Verify user
       tags:
-      - USERS
+      - AUTH
 securityDefinitions:
   BearerAuth:
     in: header

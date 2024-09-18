@@ -2,7 +2,6 @@ package token
 
 import (
 	"time"
-
 	"github.com/dgrijalva/jwt-go"
 )
 

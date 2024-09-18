@@ -43,13 +43,11 @@ func (u *UserRepo) Register(ctx context.Context, req *userpb.CreateUserReq) (*us
 		Email:    req.Email,
 	})
 
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return &userpb.CreateUserResp{
-				Status:  false,
-				Message: "Bunday user mavjud",
-			}, nil
-		}
+	if err == nil {
+		return &userpb.CreateUserResp{
+			Status:  false,
+			Message: "Bunday user mavjud",
+		}, nil
 	}
 
 	expiredKey := u.GenerateRandomNumber()
