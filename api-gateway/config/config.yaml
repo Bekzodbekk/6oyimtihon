@@ -1,5 +1,5 @@
 api-gateway:
-  host: localhost
+  host: api_gateway
   port: 9000
 
 token:
@@ -11,15 +11,15 @@ file:
 
 services:
   user-service:
-    host: localhost
+    host: user_service
     port: 8001
   incexp-service:
-    host: localhost
+    host: incexp_service
     port: 8002
   reporting-service:
-    host: localhost
+    host: reporting_service
     port: 8003
   budget-service:
-    host: localhost
+    host: budget_service
     port: 8004
   

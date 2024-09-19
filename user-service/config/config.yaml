@@ -1,16 +1,16 @@
 service:
-  host: localhost
+  host: user_service
   port: 8001
 
 postgres:
-  host: localhost
+  host: postgres
   port: 5432
   dbname: usersdb
   username: postgres
   password: 1
 
 redis:
-  host: localhost
+  host: redis
   port: 6379
 
 email: bekzodnematov709@gmail.com

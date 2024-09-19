@@ -1,0 +1,82 @@
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    container_name: redis
+    image: redis:7.2.5-alpine
+    restart: always
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+ 
+  api_gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api_gateway
+    ports:
+      - "9000:9000"
+    depends_on:
+      - user_service
+      - reporting_service
+      - incexp_service
+      - budget_service
+      - redis
+
+  user_service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user_service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+
+  reporting_service:
+    build:
+      context: ./reporting-service
+      dockerfile: Dockerfile
+    container_name: reporting_service
+    ports:
+      - "8003:8003"
+    depends_on:
+      - postgres
+
+  incexp_service:
+    build:
+      context: ./incexp-service
+      dockerfile: Dockerfile
+    container_name: incexp_service
+    ports:
+      - "8002:8002"
+    depends_on:
+      - postgres
+
+
+  budget_service:
+    build:
+      context: ./budget-service
+      dockerfile: Dockerfile
+    container_name: budget_service
+    ports:
+      - "8004:8004"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
