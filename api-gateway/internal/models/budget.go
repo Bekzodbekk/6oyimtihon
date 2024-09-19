@@ -37,5 +37,5 @@ type UpdateBudgetResponse struct {
 type GetBudgetsResp struct {
 	Status  bool      `json:"status"`
 	Message string    `json:"message"`
-	Budget  []*Budget `json:"budgets"`
+	Budget  []Budget `json:"budgets"`
 }

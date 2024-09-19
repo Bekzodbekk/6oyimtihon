@@ -17,7 +17,7 @@ import (
 // @Success 200 {object} models.CreateBudgetResponse
 // @Failure 400 {object} string
 // @Failure 500 {object} string
-// @Router /budgets [post]
+// @Router /api/v1/budgets [post]
 // @Security BearerAuth
 func (h *HandlerST) CreateBudget(c *gin.Context) {
 
@@ -48,7 +48,7 @@ func (h *HandlerST) CreateBudget(c *gin.Context) {
 // @Param budget body models.UpdateBudgetRequest true "Budget details"
 // @Success 200 {object} models.UpdateBudgetResponse
 // @Failure 500 {object} string
-// @Router /budgets/{id} [put]
+// @Router /api/v1/budgets/{id} [put]
 // @Security BearerAuth
 func (h *HandlerST) UpdateBudget(c *gin.Context) {
 	id := c.Param("id")
@@ -75,7 +75,7 @@ func (h *HandlerST) UpdateBudget(c *gin.Context) {
 // @Success 200 {object} string
 // @Failure 400 {object} string
 // @Failure 500 {object} string
-// @Router /budgets/{id} [delete]
+// @Router /api/v1/budgets/{id} [delete]
 // @Security BearerAuth
 func (h *HandlerST) DeleteBudget(c *gin.Context) {
 
@@ -107,7 +107,7 @@ func (h *HandlerST) DeleteBudget(c *gin.Context) {
 // @Success 200 {object} string
 // @Failure 400 {object} string
 // @Failure 500 {object} string
-// @Router /budgets/{id} [get]
+// @Router /api/v1/budgets/{id} [get]
 // @Security BearerAuth
 func (h *HandlerST) GetBudgetById(c *gin.Context) {
 
@@ -137,7 +137,7 @@ func (h *HandlerST) GetBudgetById(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} models.GetBudgetsResp
 // @Failure 500 {object} string
-// @Router /budgets [get]
+// @Router /api/v1/budgets [get]
 // @Security BearerAuth
 func (h *HandlerST) GetBudgets(c *gin.Context) {
 

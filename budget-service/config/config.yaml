@@ -1,6 +1,6 @@
 service:
   host: budget_service
-  port: 8002
+  port: 8004
 
 postgres:
   host: postgres

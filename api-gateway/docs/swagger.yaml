@@ -222,6 +222,151 @@ info:
   description: Api-gateway service
   version: "1.0"
 paths:
+  /api/v1/budgets:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all budgets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.GetBudgetsResp'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get all budgets
+      tags:
+      - budgets
+    post:
+      consumes:
+      - application/json
+      description: Create a new budget with the provided details
+      parameters:
+      - description: Budget details
+        in: body
+        name: budget
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateBudgetRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CreateBudgetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Create a new budget
+      tags:
+      - budgets
+  /api/v1/budgets/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a budget with the provided ID
+      parameters:
+      - description: Budget ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete a budget
+      tags:
+      - budgets
+    get:
+      consumes:
+      - application/json
+      description: Get details of a specific budget by its ID
+      parameters:
+      - description: Budget ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get a budget by ID
+      tags:
+      - budgets
+    put:
+      consumes:
+      - application/json
+      description: Update an existing budget with the provided ID
+      parameters:
+      - description: Budget ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Budget details
+        in: body
+        name: budget
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateBudgetRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UpdateBudgetResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Update an existing budget
+      tags:
+      - budgets
   /api/v1/reports/income-expense:
     get:
       consumes:
@@ -541,151 +686,6 @@ paths:
       summary: Verify user
       tags:
       - AUTH
-  /budgets:
-    get:
-      consumes:
-      - application/json
-      description: Get a list of all budgets
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.GetBudgetsResp'
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Get all budgets
-      tags:
-      - budgets
-    post:
-      consumes:
-      - application/json
-      description: Create a new budget with the provided details
-      parameters:
-      - description: Budget details
-        in: body
-        name: budget
-        required: true
-        schema:
-          $ref: '#/definitions/models.CreateBudgetRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.CreateBudgetResponse'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Create a new budget
-      tags:
-      - budgets
-  /budgets/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete a budget with the provided ID
-      parameters:
-      - description: Budget ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Delete a budget
-      tags:
-      - budgets
-    get:
-      consumes:
-      - application/json
-      description: Get details of a specific budget by its ID
-      parameters:
-      - description: Budget ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Get a budget by ID
-      tags:
-      - budgets
-    put:
-      consumes:
-      - application/json
-      description: Update an existing budget with the provided ID
-      parameters:
-      - description: Budget ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Budget details
-        in: body
-        name: budget
-        required: true
-        schema:
-          $ref: '#/definitions/models.UpdateBudgetRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.UpdateBudgetResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Update an existing budget
-      tags:
-      - budgets
 securityDefinitions:
   BearerAuth:
     in: header
